@@ -37,7 +37,7 @@ run the following commands:
 - git clone https://github.com/anthonysarkis/LOG8415-Assignment-2.git
 - cd LOG8415-Assignment-2
 - chmod +x userdata.sh
-- ./userdata.sh
+- sudo ./userdata.sh
 OR run the lines in userdata.sh one by one. 
 
 The pg4300.txt experiment output with Hadoop is in output_pg4300, the time in time_hadoop_pg4300.txt. With Linux, the time is in time_linux_pg4300.txt. The tinyurl datasets output is in output_hadoop_datasets, and the times of the three experiments are in time_hadoop_datasets_1.txt, time_hadoop_datasets_2.txt and time_hadoop_datasets_3.txt. For spark, the outputs are in output_spark_datasets, and the times are in time_spark_datasets_1.txt, time_spark_datasets_2.txt and time_spark_datasets_3.txt. For the friend recommendation experiment, the output is in friends_output folder. 
