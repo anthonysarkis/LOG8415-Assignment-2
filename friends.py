@@ -89,5 +89,19 @@ if __name__ == "__main__":
             return [(user1, [(user2, nMutualFriends)])]
         return []
 
+    # solution
+    # Processed version of the text file (key: userId, value: list of user's direct friends)
+    userToFriends = spark.read.text(input).rdd.map(lambda lineData: processInput(lineData[0]))
+    # (key: userId, value: sorted list of top ten users that aren't direct friend with userId and that have the most mutual friends with userId)
+    userToRecommendations = userToFriends\
+         .flatMap(lambda line: getPairsOfFriends(line)).reduceByKey(add)\
+             .flatMap(lambda line: userToFriendsAndConnections(line)).reduceByKey(add)\
+                      .mapValues(lambda line: getTopFriendRecommendations(line))
+    # (key: userId of users that have nobody to be recommended aka. have no friends, or only friends that have no friends, value: empty list)
+    usersWithEmptyRecommendations = userToFriends.subtractByKey(userToRecommendations).mapValues(lambda l: [])
+    # (key: userId of all users, value: list of recommendations)
+    allUsersRecommendations = userToRecommendations.union(usersWithEmptyRecommendations).map(lambda line: formatLine(line))
+    
+    allUsersRecommendations.saveAsTextFile("friends_output")
 
     spark.stop()
